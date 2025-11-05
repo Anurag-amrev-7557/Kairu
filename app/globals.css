@@ -1,0 +1,201 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap");
+
+/* Tailwind base imports */
+@import "tailwindcss";
+
+/* Force dark mode text colors to work */
+@layer base {
+    .dark .dark\:text-white {
+        color: rgb(255 255 255) !important;
+    }
+    
+    .dark .dark\:text-black {
+        color: rgb(0 0 0) !important;
+    }
+    
+    .text-black {
+        color: rgb(0 0 0) !important;
+    }
+    
+    .text-white {
+        color: rgb(255 255 255) !important;
+    }
+}
+
+/* Root color variables */
+:root {
+    --background: 255 255 255;
+    --foreground: 0 0 0;
+    --muted: 245 245 245;
+    --border: 229 229 229;
+    --accent: 173 216 255;
+}
+
+/* Dark mode color variables */
+.dark {
+    --background: 17 24 39;
+    --foreground: 255 255 255;
+    --muted: 31 41 55;
+    --border: 55 65 81;
+    --accent: 96 165 250;
+}
+
+/* Global element styles */
+* {
+    border-color: rgb(var(--border));
+}
+
+button {
+    cursor: pointer;
+    border-radius: 2rem;
+}
+
+/* Remove focus rings globally */
+*:focus,
+*:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+body {
+    background-color: rgb(var(--background));
+    color: rgb(var(--foreground));
+    font-family: Inter, sans-serif;
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease;
+}
+
+@layer utilities {
+    .text-balance {
+        text-wrap: balance;
+    }
+}
+
+/* Custom scrollbar - appears only when scrolling */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+}
+
+*:hover {
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+.dark *:hover {
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
+*:hover::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.dark *:hover::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+*:hover::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.dark *:hover::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Animation keyframes */
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+.animate-shimmer {
+    animation: shimmer 2s infinite linear;
+    background: linear-gradient(
+        to right,
+        #f6f7f8 0%,
+        #edeef1 20%,
+        #f6f7f8 40%,
+        #f6f7f8 100%
+    );
+    background-size: 1000px 100%;
+}
+
+.dark .animate-shimmer {
+    background: linear-gradient(
+        to right,
+        #1f2937 0%,
+        #374151 20%,
+        #1f2937 40%,
+        #1f2937 100%
+    );
+    background-size: 1000px 100%;
+}
+
+/* Timer pulse animation */
+@keyframes timer-pulse {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.timer-pulse {
+    animation: timer-pulse 2s ease-in-out infinite;
+}
+
+/* Focus mode gradient */
+.focus-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Glass morphism effect */
+.glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark .glass {
+    background: rgba(31, 41, 55, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* liquidGL glass effect cards */
+.glass-stat-card,
+.glass-chart-card,
+.glass-ai-card,
+.glass-onboarding {
+    position: relative;
+    z-index: 1;
+    transition: transform 0.3s ease;
+}
+
+.glass-stat-card:hover,
+.glass-chart-card:hover,
+.glass-ai-card:hover,
+.glass-onboarding:hover {
+    transform: translateY(-2px);
+}
