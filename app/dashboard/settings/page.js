@@ -243,7 +243,7 @@ export default function SettingsPage() {
 
           {/* Content */}
           <div className="flex-1 flex flex-col min-h-0">
-            <div className="bg-gray-50 rounded-xl border border-gray-200 p-6 flex-1 overflow-y-auto">
+            <div className="rounded-xl border border-gray-200 p-6 flex-1 overflow-y-auto">
               <AnimatePresence mode="wait">
                 {/* Profile Tab */}
                 {activeTab === TABS.PROFILE && (

@@ -90,7 +90,7 @@ export default function AIAssistantPage() {
   };
 
   return (
-    <div className="h-screen overflow-hidden bg-gray-50">
+    <div className="h-screen overflow-hidden">
       <div className="h-full flex flex-col max-w-[1400px] mx-auto p-4 md:p-6">
         {/* Header */}
         <motion.div

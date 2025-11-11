@@ -115,7 +115,7 @@ const SessionLogging = () => {
   };
 
   return (
-    <section className="relative py-16 bg-gray-50 overflow-hidden">
+    <section className="relative py-16 overflow-hidden">
       <div className="container mx-auto px-4">
         {/* Header */}
         <motion.div

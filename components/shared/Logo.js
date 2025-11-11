@@ -1,9 +1,7 @@
 "use client";
-import { useTheme } from "../providers/ThemeProvider";
 
 export default function Logo({ size = 40 }) {
-  const { theme } = useTheme();
-  const strokeColor = theme === "dark" ? "#FFFFFF" : "#000000";
+  const strokeColor = "#000000";
 
   return (
     <svg

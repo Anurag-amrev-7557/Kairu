@@ -250,12 +250,12 @@ export default function PlannerPage() {
                   <p className="text-xs text-gray-500">Organize your day</p>
                 </div>
 
-                <div className="flex items-center gap-2 bg-gray-50 rounded-lg px-2 py-1.5">
+                <div className="flex items-center gap-2 rounded-lg px-2 py-1.5">
                   <button
                     onClick={goToPreviousDay}
-                    className="p-1.5 hover:bg-gray-200 rounded transition-colors"
+                    className="p-2 hover:bg-gray-200 rounded transition-colors"
                   >
-                    <ChevronLeft className="w-4 h-4 text-gray-600" />
+                    <ChevronLeft className="w-5 h-5 text-gray-600" />
                   </button>
 
                   <div className="px-3 min-w-[160px] text-center">
@@ -269,9 +269,9 @@ export default function PlannerPage() {
 
                   <button
                     onClick={goToNextDay}
-                    className="p-1.5 hover:bg-gray-200 rounded transition-colors"
+                    className="p-2 hover:bg-gray-200 rounded transition-colors"
                   >
-                    <ChevronRight className="w-4 h-4 text-gray-600" />
+                    <ChevronRight className="w-5 h-5 text-gray-600" />
                   </button>
 
                   {!isToday && (
@@ -287,7 +287,7 @@ export default function PlannerPage() {
 
               {/* Stats & View Toggle */}
               <div className="flex items-center gap-3">
-                <div className="flex items-center gap-4 px-4 py-2 bg-gray-50 rounded-lg">
+                <div className="flex items-center gap-4 px-4 py-2 rounded-lg">
                   <div className="flex items-center gap-2">
                     <div className="w-7 h-7 rounded-full bg-green-100 flex items-center justify-center">
                       <CheckCircle className="w-3.5 h-3.5 text-green-600" />
@@ -565,7 +565,7 @@ export default function PlannerPage() {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: idx * 0.01 }}
-                                className="group flex items-stretch hover:bg-gray-50 rounded-lg transition-colors"
+                                className="group flex items-stretch rounded-lg transition-colors"
                               >
                                 <div className="flex-shrink-0 w-20 py-3 pl-3 flex items-start">
                                   <span className="text-xs font-medium text-gray-500">
@@ -801,7 +801,7 @@ export default function PlannerPage() {
                                                 }}
                                                 whileHover={{ scale: 1.03 }}
                                                 whileTap={{ scale: 0.97 }}
-                                                className="px-3 py-1 scale-110 bg-gray-100 text-gray-700 rounded-full text-xs font-medium hover:bg-gray-200 transition-colors"
+                                                className="px-3 py-1 scale-110 bg-gray-100 text-gray-700 rounded-full text-xs font-medium transition-colors"
                                               >
                                                 Cancel
                                               </motion.button>
@@ -816,7 +816,7 @@ export default function PlannerPage() {
                                       className={`h-full min-h-[60px] border-2 border-dashed rounded-lg transition-all cursor-pointer flex items-center justify-center ${
                                         draggedTask
                                           ? "border-blue-400 bg-blue-50"
-                                          : "border-gray-200 hover:border-black hover:bg-gray-50"
+                                          : "border-gray-200 hover:border-black"
                                       }`}
                                     >
                                       <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">

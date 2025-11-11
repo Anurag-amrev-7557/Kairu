@@ -103,6 +103,26 @@ export default function DashboardSidebar({ isCollapsed }) {
   const router = useRouter();
   const { data: session } = useSession();
 
+  // Sidebar motion variants — animate width and apply overflow hidden to avoid layout jumps
+  const sidebarVariants = {
+    expanded: {
+      width: 224, // slightly narrower (was 224)
+      transition: {
+        type: "spring",
+        stiffness: 200,
+        damping: 22,
+      },
+    },
+    collapsed: {
+      width: 56, // slightly narrower when collapsed (was 64)
+      transition: {
+        type: "spring",
+        stiffness: 200,
+        damping: 22,
+      },
+    },
+  };
+
   const isActive = (href) => {
     if (href === "/dashboard") {
       return pathname === "/dashboard";
@@ -116,17 +136,22 @@ export default function DashboardSidebar({ isCollapsed }) {
   };
 
   return (
-    <div className="h-full flex flex-col py-6 relative">
+    <motion.aside
+      className="h-full flex flex-col py-6 relative overflow-hidden"
+      initial={false}
+      animate={isCollapsed ? "collapsed" : "expanded"}
+      variants={sidebarVariants}
+    >
       {/* Logo / Brand */}
       <div className="px-4 mb-5">
         <AnimatePresence mode="wait">
           {!isCollapsed ? (
             <Link
               key="expanded"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2, ease: "easeInOut" }}
+              initial={{ opacity: 0, x: -6 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -6 }}
+              transition={{ duration: 0.18, ease: "easeInOut" }}
               className="flex items-center gap-1"
               href="/"
             >
@@ -141,11 +166,11 @@ export default function DashboardSidebar({ isCollapsed }) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.2, ease: "easeInOut" }}
+              transition={{ duration: 0.12, ease: "easeInOut" }}
               className="flex justify-center"
               href="/"
             >
-              <div className="h-9 w-9 flex-shrink-0">
+              <div className="h-9 w-9 flex-shrink-0 ml-3">
                 <Logo size={36} />
               </div>
             </Link>
@@ -154,24 +179,19 @@ export default function DashboardSidebar({ isCollapsed }) {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 overflow-y-auto overflow-x-hidden px-3 scrollbar-none">
+      <nav className="flex-1 overflow-y-auto overflow-x-hidden px-3 pr-2 scrollbar-none">
         {navigationGroups.map((group, groupIndex) => (
           <div
             key={groupIndex}
-            className={`${groupIndex > 0 ? "mt-6" : ""} space-y-1`}
+            className={`${groupIndex > 0 ? "mt-6" : ""} space-y-1 ml-1`}
           >
             <AnimatePresence>
               {group.label && !isCollapsed && (
                 <motion.p
-                  initial={{ opacity: 0, height: 0, y: -10 }}
-                  animate={{ opacity: 1, height: "auto", y: 0 }}
-                  exit={{ opacity: 0, height: 0, y: -10 }}
-                  transition={{
-                    duration: 0.3,
-                    height: { type: "spring", stiffness: 500, damping: 30 },
-                    opacity: { duration: 0.2 },
-                    y: { type: "spring", stiffness: 300, damping: 25 },
-                  }}
+                  initial={{ opacity: 0, x: -8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -8 }}
+                  transition={{ duration: 0.18 }}
                   className="px-3 text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-3"
                 >
                   {group.label}
@@ -186,36 +206,33 @@ export default function DashboardSidebar({ isCollapsed }) {
                 <Link key={item.id} href={item.href}>
                   <motion.div
                     layout="position"
+                    role="link"
+                    tabIndex={0}
+                    aria-current={active ? "page" : undefined}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        router.push(item.href);
+                      }
+                    }}
+                    title={item.label}
                     className={`relative flex items-center gap-3 px-3 py-2.5 transition-colors duration-200 group ${
                       active
                         ? "bg-black/90 text-white shadow-sm"
                         : "text-gray-600 hover:text-black hover:bg-gray-100"
                     } ${isCollapsed ? "justify-center rounded-full w-9 h-9 p-0 mb-2" : "rounded-full"}`}
+                    // keyboard-visible focus styles
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     transition={{
-                      layout: {
-                        type: "spring",
-                        stiffness: 300,
-                        damping: 25,
-                      },
-                      scale: {
-                        type: "spring",
-                        stiffness: 400,
-                        damping: 20,
-                      },
+                      layout: { type: "spring", stiffness: 200, damping: 22 },
+                      scale: { type: "spring", stiffness: 300, damping: 18 },
                     }}
                   >
                     <motion.div
                       layout="position"
                       className="flex items-center gap-3"
-                      transition={{
-                        layout: {
-                          type: "spring",
-                          stiffness: 300,
-                          damping: 25,
-                        },
-                      }}
+                      transition={{ layout: { type: "spring", stiffness: 200, damping: 22 } }}
                     >
                       <Icon
                         className="w-5 h-5 flex-shrink-0"
@@ -224,13 +241,10 @@ export default function DashboardSidebar({ isCollapsed }) {
                       <AnimatePresence mode="popLayout">
                         {!isCollapsed && (
                           <motion.span
-                            initial={{ opacity: 0, width: 0 }}
-                            animate={{ opacity: 1, width: "auto" }}
-                            exit={{ opacity: 0, width: 0 }}
-                            transition={{
-                              opacity: { duration: 0.2 },
-                              width: { duration: 0.2 },
-                            }}
+                            initial={{ opacity: 0, x: -6 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -6 }}
+                            transition={{ duration: 0.16 }}
                             className="text-[13px] font-medium whitespace-nowrap overflow-hidden tracking-tight"
                           >
                             {item.label}
@@ -251,6 +265,16 @@ export default function DashboardSidebar({ isCollapsed }) {
         <Link href="/dashboard/settings">
           <motion.div
             layout="position"
+            role="link"
+            tabIndex={0}
+            aria-current={isActive("/dashboard/settings") ? "page" : undefined}
+            title="Settings"
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                router.push("/dashboard/settings");
+              }
+            }}
             className={`flex items-center gap-3 px-3 py-2.5 transition-colors duration-200 ${
               isActive("/dashboard/settings")
                 ? "bg-black text-white shadow-sm"
@@ -286,13 +310,10 @@ export default function DashboardSidebar({ isCollapsed }) {
               <AnimatePresence mode="popLayout">
                 {!isCollapsed && (
                   <motion.span
-                    initial={{ opacity: 0, width: 0 }}
-                    animate={{ opacity: 1, width: "auto" }}
-                    exit={{ opacity: 0, width: 0 }}
-                    transition={{
-                      opacity: { duration: 0.2 },
-                      width: { duration: 0.2 },
-                    }}
+                    initial={{ opacity: 0, x: -6 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -6 }}
+                    transition={{ duration: 0.16 }}
                     className="text-[13px] font-medium whitespace-nowrap overflow-hidden tracking-tight"
                   >
                     Settings
@@ -341,13 +362,10 @@ export default function DashboardSidebar({ isCollapsed }) {
             <AnimatePresence mode="popLayout">
               {!isCollapsed && (
                 <motion.span
-                  initial={{ opacity: 0, width: 0 }}
-                  animate={{ opacity: 1, width: "auto" }}
-                  exit={{ opacity: 0, width: 0 }}
-                  transition={{
-                    opacity: { duration: 0.2 },
-                    width: { duration: 0.2 },
-                  }}
+                  initial={{ opacity: 0, x: -6 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -6 }}
+                  transition={{ duration: 0.16 }}
                   className="text-[13px] font-medium whitespace-nowrap overflow-hidden tracking-tight"
                 >
                   Sign Out
@@ -416,6 +434,6 @@ export default function DashboardSidebar({ isCollapsed }) {
           )}
         </AnimatePresence>
       </div>
-    </div>
+    </motion.aside>
   );
 }

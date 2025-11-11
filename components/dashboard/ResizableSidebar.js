@@ -20,6 +20,23 @@ export default function ResizableSidebar({
     setIsResizing(true);
   };
 
+  const handleResizerKeyDown = (e) => {
+    // allow keyboard resizing of the sidebar when resizer is focused
+    if (e.key === "ArrowLeft") {
+      setWidth((w) => Math.max(minWidth, w - 10));
+      e.preventDefault();
+    } else if (e.key === "ArrowRight") {
+      setWidth((w) => Math.min(maxWidth, w + 10));
+      e.preventDefault();
+    } else if (e.key === "Home") {
+      setWidth(minWidth);
+      e.preventDefault();
+    } else if (e.key === "End") {
+      setWidth(maxWidth);
+      e.preventDefault();
+    }
+  };
+
   useEffect(() => {
     const handleMouseMove = (e) => {
       if (!isResizing) return;
@@ -93,6 +110,14 @@ export default function ResizableSidebar({
           <div
             className="absolute top-0 right-0 w-1 h-full cursor-col-resize group"
             onMouseDown={startResizing}
+            role="separator"
+            aria-orientation="vertical"
+            aria-valuenow={Math.round(width)}
+            aria-valuemin={minWidth}
+            aria-valuemax={maxWidth}
+            tabIndex={0}
+            onKeyDown={handleResizerKeyDown}
+            title="Resize sidebar (Left / Right)"
           >
             <motion.div
               className="absolute top-1/2 right-0 -translate-y-1/2 w-0.5 h-16 bg-gray-300/50 group-hover:bg-black"
@@ -104,6 +129,9 @@ export default function ResizableSidebar({
 
         <motion.button
           onClick={() => setIsCollapsed(!isCollapsed)}
+          aria-label="Toggle sidebar"
+          aria-expanded={!isCollapsed}
+          title="Toggle sidebar"
           className="absolute top-[70%] -right-4 group z-10 scale-110"
           whileHover="hover"
           whileTap="tap"

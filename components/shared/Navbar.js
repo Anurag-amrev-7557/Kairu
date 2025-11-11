@@ -26,8 +26,6 @@ import {
 } from "framer-motion";
 import { usePathname, useRouter } from "next/navigation";
 import Logo from "./Logo";
-import ThemeToggle from "./ThemeToggle";
-import { useTheme } from "../providers/ThemeProvider";
 
 // Performance constants
 const ANIMATION_DURATION = 0.15;
@@ -78,24 +76,19 @@ const dashboardNavigationItems = Object.freeze([
 const NavLink = memo(({ href, children, pathname }) => {
   const active =
     pathname === href || (href !== "/" && pathname.startsWith(href));
-  const { theme } = useTheme();
-
-  // explicit colors so background behaves correctly in both themes
-  const activeColor = theme === "dark" ? "rgba(255,255,255,0.7)" : "rgba(0,0,0,0.7)";
-  const inactiveColor = theme === "dark" ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.4)";
+  // Use CSS classes for coloring; dark styles will apply if `dark` class exists on html.
 
   return (
     <Link
       href={href}
       aria-current={active ? "page" : undefined}
-      className="group text-black dark:text-white relative hover:opacity-80 transition-all duration-300 rounded-md px-1 py-1"
+      className="group text-black relative hover:opacity-80 transition-all duration-300 rounded-md px-1 py-1"
     >
       {children}
       <span
         className={`pointer-events-none absolute left-0 right-0 -bottom-0.5 h-[2px] origin-left rounded-full transition-all duration-300 ease-out ${
-          active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+          active ? "scale-x-100 bg-black " : "scale-x-0 group-hover:scale-x-100 bg-black/40 "
         }`}
-        style={{ backgroundColor: active ? activeColor : inactiveColor }}
       />
     </Link>
   );
@@ -106,7 +99,7 @@ NavLink.displayName = "NavLink";
 const UserProfileDropdown = memo(({ user, onSignOut }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const { theme } = useTheme();
+  // theme hook removed; use CSS dark variants instead
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -127,7 +120,7 @@ const UserProfileDropdown = memo(({ user, onSignOut }) => {
     <div className="relative flex items-center" ref={dropdownRef}>
       <motion.button
         onClick={() => setDropdownOpen(!dropdownOpen)}
-        className="flex items-center justify-center w-9 h-9 rounded-full bg-black dark:bg-white hover:opacity-80 transition-all duration-300"
+        className="flex items-center justify-center w-9 h-9 rounded-full bg-black  hover:opacity-80 transition-all duration-300"
         aria-label="User menu"
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
@@ -140,7 +133,7 @@ const UserProfileDropdown = memo(({ user, onSignOut }) => {
             className="w-full h-full rounded-full object-cover"
           />
         ) : (
-          <UserIcon size={18} strokeWidth={1.5} className="flex-shrink-0 text-white dark:text-black" />
+          <UserIcon size={18} strokeWidth={1.5} className="flex-shrink-0 text-white " />
         )}
       </motion.button>
 
@@ -151,25 +144,21 @@ const UserProfileDropdown = memo(({ user, onSignOut }) => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -5 }}
             transition={{ duration: 0.15 }}
-            className={
-              theme === "dark"
-                ? "absolute right-0 top-full mt-6 w-56 rounded-xl bg-gray-800 text-white border border-gray-700 shadow-2xl overflow-hidden z-50"
-                : "absolute right-0 top-full mt-6 w-56 rounded-xl bg-white text-black border border-gray-200 shadow-lg overflow-hidden z-50"
-            }
+            className={"absolute right-0 top-full mt-6 w-56 rounded-xl bg-white text-black border border-gray-200 shadow-lg overflow-hidden z-50"}
           >
-            <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-              <p className="text-sm font-medium text-black dark:text-white truncate">
+            <div className="px-4 py-3 border-b border-gray-200 ">
+              <p className="text-sm font-medium text-black truncate">
                 {user?.name || "User"}
               </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{user?.email}</p>
+              <p className="text-xs text-gray-500 truncate">{user?.email}</p>
             </div>
 
             {/* Menu Items */}
-            <div className="py-1">
+            <div className="">
               <Link
                 href="/dashboard"
                 onClick={() => setDropdownOpen(false)}
-                className="flex items-center gap-3 px-4 py-2.5 text-sm text-black dark:text-white hover:bg-white/10 dark:hover:bg-black/10 transition-all duration-300"
+                className="flex items-center gap-3 px-4 py-2.5 text-sm text-black hover:bg-gray-100 transition-all duration-300"
               >
                 <LayoutDashboard size={16} />
                 Dashboard
@@ -177,7 +166,7 @@ const UserProfileDropdown = memo(({ user, onSignOut }) => {
               <Link
                 href="/dashboard/settings"
                 onClick={() => setDropdownOpen(false)}
-                className="flex items-center gap-3 px-4 py-2.5 text-sm text-black dark:text-white hover:bg-gray-100 dark:hover:bg-black/10 transition-all duration-300"
+                className="flex items-center gap-3 px-4 py-2.5 text-sm text-black hover:bg-gray-100 transition-all duration-300"
               >
                 <Settings size={16} />
                 Settings
@@ -185,13 +174,13 @@ const UserProfileDropdown = memo(({ user, onSignOut }) => {
             </div>
 
             {/* Sign Out */}
-            <div className="border-t border-gray-200 dark:border-gray-700 py-1">
+            <div className="border-t border-gray-200">
               <button
                 onClick={() => {
                   setDropdownOpen(false);
                   onSignOut();
                 }}
-                className="flex items-center !rounded-none gap-3 w-full px-4 py-2.5 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-red-50 transition-all duration-300"
+                className="flex items-center !rounded-none gap-3 w-full px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-all duration-300"
               >
                 <LogOut size={16} />
                 Sign out
@@ -209,7 +198,7 @@ function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const { data: session, status } = useSession();
-  const { theme } = useTheme();
+  // Theme provider removed: rely on CSS dark variants if `dark` class is present on <html>.
 
   // State management
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -223,20 +212,9 @@ function Navbar() {
   const radius = useTransform(progress, [0, 1], [20, 999]);
   const pad = useTransform(progress, [0, 1], [24, 12]);
 
-  // Theme-aware colors - memoized based on theme
-  const bgColors = useMemo(
-    () => theme === "dark"
-      ? ["rgba(31,41,55,0.0)", "rgba(31,41,55,1)"]
-      : ["rgba(255,255,255,0.0)", "rgba(255,255,255,0.70)"],
-    [theme]
-  );
-
-  const shadowColors = useMemo(
-    () => theme === "dark"
-      ? ["0 0 0 rgba(0,0,0,0)", "0 10px 30px rgba(0,0,0,0.35)"]
-      : ["0 0 0 rgba(0,0,0,0)", "0 10px 30px rgba(0,0,0,0.12)"],
-    [theme]
-  );
+  // Use default (light) background/shadow transforms. Tailwind handles dark variants in CSS.
+  const bgColors = useMemo(() => ["rgba(255,255,255,0.0)", "rgba(255,255,255,0.70)"], []);
+  const shadowColors = useMemo(() => ["0 0 0 rgba(0,0,0,0)", "0 10px 30px rgba(0,0,0,0.12)"], []);
 
   const bg = useTransform(progress, [0, 1], bgColors);
   const shadow = useTransform(progress, [0, 1], shadowColors);
@@ -307,9 +285,9 @@ function Navbar() {
           key={item.href}
           onClick={handleMobileMenuClose}
           href={item.href}
-          className="px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 inline-flex items-center gap-2 transition-all duration-300 text-black dark:text-white"
+          className="px-3 py-2 rounded-md hover:bg-gray-100  inline-flex items-center gap-2 transition-all duration-300 text-black"
         >
-          {item.icon && <item.icon size={16} className="flex-shrink-0" />}
+          {item.icon && <item.icon size={16} className="flex-shrink-0 text-black " />}
           {item.label}
         </Link>
       )),
@@ -364,7 +342,7 @@ function Navbar() {
           <motion.div
             aria-hidden
             style={{ opacity: ringOpacity }}
-            className="pointer-events-none absolute inset-0 rounded-[inherit] ring-1 ring-black/5 dark:ring-white/10"
+            className="pointer-events-none absolute inset-0 rounded-[inherit] ring-1 ring-black/5"
           />
 
           {/* Logo */}
@@ -377,36 +355,31 @@ function Navbar() {
               <div className="h-9 w-9 flex-shrink-0">
                 <Logo size={36} />
               </div>
-              <span className="font-semibold tracking-tight text-[19.2px] text-black dark:text-white transition-colors duration-300">
+              <span className="font-semibold tracking-tight text-[19.2px] text-black transition-colors duration-300">
                 Orbitly
               </span>
             </Link>
           </div>
 
           {/* Desktop Navigation */}
-          <nav
-            className="hidden md:flex items-center gap-8 text-[15px]"
-            role="navigation"
-            aria-label="Main navigation"
-          >
-            {desktopNavLinks}
-          </nav>
+            <nav className="hidden md:flex items-center gap-8 text-[15px]" role="navigation" aria-label="Main navigation">
+              {desktopNavLinks}
+            </nav>
 
           {/* Mobile Menu Button */}
           <button
             type="button"
             onClick={handleMobileMenuToggle}
-            className="md:hidden inline-flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300 text-black dark:text-white"
+            className="md:hidden inline-flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 hover:bg-gray-100 transition-all duration-300 text-black"
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileOpen}
           >
-            <MenuIcon size={18} strokeWidth={1.5} />
+            <MenuIcon size={18} strokeWidth={1.5} className="text-black" />
           </button>
 
           {/* Right side actions */}
           <div className="hidden md:flex items-center gap-3">
-            {/* Theme Toggle */}
-            <ThemeToggle />
+            {/* Theme section removed */}
             {!isLoading && (
               isAuthenticated ? (
                 <motion.div
@@ -428,14 +401,14 @@ function Navbar() {
                 >
                   <Link
                     href="/login"
-                    className="text-sm text-black dark:text-white transition-all duration-300 hover:opacity-80 rounded-md px-2 py-1"
+                    className="text-sm text-black transition-all duration-300 hover:opacity-80 rounded-md px-2 py-1"
                     aria-label="Log in"
                   >
                     Log in
                   </Link>
                   <Link
                     href="/register"
-                    className="inline-flex items-center gap-2 rounded-full bg-black dark:bg-white text-white dark:text-black px-4 py-2 text-sm hover:opacity-90 transition-all duration-300"
+                    className="inline-flex items-center gap-2 rounded-full bg-black text-white px-4 py-2 text-sm hover:opacity-90 transition-all duration-300"
                     aria-label="Sign up"
                   >
                     Sign up <ArrowUpRight size={16} strokeWidth={1.5} />
@@ -470,59 +443,59 @@ function Navbar() {
                 animate={{ x: 0 }}
                 exit={{ x: "100%" }}
                 transition={MOBILE_MENU_TRANSITION}
-                className="absolute right-0 top-0 h-full w-[85%] max-w-sm bg-white/95 dark:bg-gray-800/95 backdrop-blur-md border-l border-gray-200 dark:border-gray-700 shadow-xl transition-colors duration-300"
+                className="absolute right-0 top-0 h-full w-[85%] max-w-sm bg-white/95 backdrop-blur-md border-l border-gray-200 shadow-xl transition-colors duration-300"
                 role="dialog"
                 aria-modal="true"
                 aria-label="Mobile navigation menu"
               >
                 <div className="flex items-center justify-between p-4">
-                  <div className="font-semibold text-black dark:text-white">Menu</div>
+                  <div className="font-semibold text-black ">Menu</div>
                   <button
                     onClick={handleMobileMenuClose}
-                    className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300 text-black dark:text-white"
+                    className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 hover:bg-gray-100 transition-all duration-300 text-black"
                     aria-label="Close menu"
                   >
-                    <CloseIcon size={18} strokeWidth={1.5} />
+                    <CloseIcon size={18} strokeWidth={1.5} className="text-black " />
                   </button>
                 </div>
 
-                <div className="h-px bg-gray-200 dark:bg-gray-700" />
+                <div className="h-px bg-gray-200" />
 
                 {/* Theme Toggle in Mobile Menu */}
-                <div className="p-4 flex items-center justify-between border-b border-gray-200 dark:border-gray-700">
-                  <span className="text-sm font-medium text-black dark:text-white">Theme</span>
-                  <ThemeToggle />
+                <div className="p-4 flex items-center justify-between border-b border-gray-200">
+                  <span className="text-sm font-medium text-black">Theme</span>
+                  {/* Theme section removed */}
                 </div>
 
                 <div className="p-2 flex flex-col text-sm gap-1">
                   {mobileNavLinks}
                 </div>
 
-                <div className="h-px bg-gray-200 dark:bg-gray-700" />
+                <div className="h-px bg-gray-200" />
 
                 {/* Mobile auth section */}
                 {isAuthenticated ? (
                   <div className="p-2 space-y-2">
                     {/* User Info */}
-                    <div className="px-3 py-2.5 border-b border-gray-200 dark:border-gray-700">
-                      <p className="text-sm font-medium text-black dark:text-white truncate">
+                    <div className="px-3 py-2.5 border-b border-gray-200">
+                      <p className="text-sm font-medium text-black truncate">
                         {session?.user?.name || "User"}
                       </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                      <p className="text-xs text-gray-500 truncate">
                         {session?.user?.email}
                       </p>
                     </div>
                     <Link
                       onClick={handleMobileMenuClose}
                       href="/dashboard/settings"
-                      className="flex items-center gap-2 px-3 py-2.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300 text-black dark:text-white"
+                      className="flex items-center gap-2 px-3 py-2.5 rounded-md hover:bg-gray-100 transition-all duration-300 text-black"
                     >
-                      <Settings size={16} />
+                      <Settings size={16} className="text-black" />
                       Settings
                     </Link>
                     <button
                       onClick={handleSignOut}
-                      className="flex items-center gap-2 w-full px-3 py-2.5 rounded-md text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300"
+                      className="flex items-center gap-2 w-full px-3 py-2.5 rounded-md text-red-600 hover:bg-gray-100 transition-all duration-300"
                     >
                       <LogOut size={16} />
                       Sign out
@@ -533,7 +506,7 @@ function Navbar() {
                     <Link
                       onClick={handleMobileMenuClose}
                       href="/login"
-                      className="block px-3 py-2.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300 text-black dark:text-white"
+                      className="block px-3 py-2.5 rounded-md hover:bg-gray-100 transition-all duration-300 text-black"
                       aria-label="Log in"
                     >
                       Log in
@@ -541,10 +514,10 @@ function Navbar() {
                     <Link
                       onClick={handleMobileMenuClose}
                       href="/register"
-                      className="inline-flex items-center gap-2 rounded-full bg-black dark:bg-white text-white dark:text-black px-4 py-2 text-sm hover:opacity-90 transition-all duration-300 w-full justify-center"
+                      className="inline-flex items-center gap-2 rounded-full bg-black text-white px-4 py-2 text-sm hover:opacity-90 transition-all duration-300 w-full justify-center"
                       aria-label="Sign up"
                     >
-                      Sign up <ArrowUpRight size={16} strokeWidth={1.5} />
+                      Sign up <ArrowUpRight size={16} strokeWidth={1.5} className="text-white " />
                     </Link>
                   </div>
                 )}

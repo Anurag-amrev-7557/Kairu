@@ -686,7 +686,7 @@ export default function TasksPage() {
                   <Filter className="w-4 h-4" />
                   <span className="text-sm font-medium">Status</span>
                 </div>
-                <div className="relative flex bg-gray-50 rounded-lg p-1">
+                <div className="relative flex bg-gray-50 rounded-full p-1">
                   {filterOptions.map(({ label, Icon }) => (
                     <motion.button
                       key={label}
@@ -727,7 +727,7 @@ export default function TasksPage() {
                   <Tag className="w-4 h-4" />
                   <span className="text-sm font-medium">Priority</span>
                 </div>
-                <div className="relative flex bg-gray-50 rounded-lg p-1">
+                <div className="relative flex bg-gray-50 rounded-full p-1">
                   {priorityOptions.map(({ label, Icon }) => (
                     <motion.button
                       key={label}
@@ -769,7 +769,7 @@ export default function TasksPage() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.3, ease: "easeOut" }}
-              className="relative overflow-hidden text-center py-20 bg-gradient-to-br from-gray-50 to-white rounded-3xl"
+              className="relative overflow-hidden text-center py-20 rounded-3xl"
             >
               {/* Decorative circles */}
               <div className="absolute top-10 left-10 w-32 h-32 bg-gray-100 rounded-full opacity-40 blur-2xl"></div>

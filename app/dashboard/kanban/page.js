@@ -302,7 +302,7 @@ export default function KanbanPage() {
               layoutScroll
             >
               {/* Column Header */}
-              <div className="bg-gray-50 roundedt-t-2xl px-4 py-3 border-b border-gray-200">
+              <div className="roundedt-t-2xl px-4 py-3 border-b border-gray-200">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div
@@ -323,10 +323,10 @@ export default function KanbanPage() {
                 onDragOver={(e) => handleDragOver(e, column.id)}
                 onDragLeave={handleDragLeave}
                 onDrop={(e) => handleDrop(e, column.id)}
-                className={`flex-1 bg-gray-50 rounded-2xl p-3 space-y-3 overflow-y-auto transition-all duration-300 ease-in-out ${
+                className={`flex-1 rounded-2xl p-3 space-y-3 overflow-y-auto transition-all duration-300 ease-in-out ${
                   draggedOverColumn === column.id
-                    ? "bg-gray-100 ring-2 ring-black/50 ring-inset ring-opactiy-100"
-                    : "ring--2 ring-transparent ring-opacity-0"
+                    ? "bg-gray-100 ring-1 ring-black/50 ring-inset ring-opactiy-100"
+                    : "ring--1 ring-transparent ring-opacity-0"
                 }`}
               >
                 <AnimatePresence mode="popLayout">

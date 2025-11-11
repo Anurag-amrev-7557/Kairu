@@ -96,7 +96,7 @@ export default function DashboardLayout({ children }) {
 
       {/* Main Application Container */}
       <QuickTaskProvider>
-        <div className="flex h-screen overflow-hidden bg-gray-50">
+        <div className="flex h-screen overflow-hidden">
           {/* Sidebar Section */}
           <ResizableSidebar>
             {(isCollapsed) => (

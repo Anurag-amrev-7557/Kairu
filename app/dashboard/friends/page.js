@@ -255,7 +255,7 @@ export default function FriendsPage() {
         </AnimatePresence>
 
         {/* Content Area */}
-        <div className="bg-gray-50 rounded-2xl border border-gray-200 p-6">
+        <div className="rounded-2xl border border-gray-200 p-6">
           <AnimatePresence mode="wait">
             {/* My Friends Tab */}
             {activeTab === TABS.FRIENDS && (

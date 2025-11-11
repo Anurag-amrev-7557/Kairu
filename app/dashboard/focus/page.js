@@ -502,7 +502,7 @@ export default function FocusPage() {
                             >
                               <div className="flex items-center gap-2">
                                 <div
-                                  className={`w-1.5 h-1.5 rounded-full ${
+                                  className={`w-1.5 h-1.5  ${
                                     task.priority === "high"
                                       ? "bg-red-500"
                                       : task.priority === "medium"
